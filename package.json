@@ -1,0 +1,41 @@
+{
+  "name": "auto-suggest-filter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/cjs/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "start": "rollup -c -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rodrigolimoes/Auto-Suggest-Filter.git"
+  },
+  "author": "rodrigo.limoes",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/rodrigolimoes/Auto-Suggest-Filter/issues"
+  },
+  "homepage": "https://github.com/rodrigolimoes/Auto-Suggest-Filter#readme",
+  "dependencies": {
+    "@types/styled-components": "^5.1.26",
+    "styled-components": "^5.3.5"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.14",
+    "@types/react": "^18.0.18",
+    "@types/react-dom": "^18.0.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rollup": "^2.79.0",
+    "rollup-plugin-typescript2": "^0.33.0",
+    "typescript": "^4.8.2"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
