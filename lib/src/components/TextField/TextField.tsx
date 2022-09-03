@@ -4,6 +4,7 @@ import { Input } from "./style";
 interface TextFieldStateProps {
   placeholder: string;
   value: string;
+  isShowDropdown: boolean;
 }
 
 interface TextFieldDispatchProps {
@@ -15,18 +16,16 @@ type TextFieldProps = TextFieldDispatchProps & TextFieldStateProps;
 const TextField: React.FC<TextFieldProps> = ({
   placeholder,
   value,
+  isShowDropdown,
   onChange,
 }) => {
-  const onChangeTextField = (value: string) => {
-    onChange(value);
-  };
-
   return (
     <Input
+      isShowDropdown={isShowDropdown}
       placeholder={placeholder}
       value={value}
       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-        onChangeTextField(event.target.value);
+        onChange(event.target.value);
       }}
     />
   );
