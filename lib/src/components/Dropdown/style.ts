@@ -18,7 +18,7 @@ export const Element = styled.li<ElementProps>`
     `}
 `;
 
-export const List = styled.ul`
+export const Wrapper = styled.ul`
   width: 100%;
   padding: 0 20px 0 20px;
   margin: 0;
