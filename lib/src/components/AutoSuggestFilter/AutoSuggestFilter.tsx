@@ -1,10 +1,9 @@
 import React from "react";
-import TextField from "../TextField/TextField";
+import { Suggestions } from "../../model/Suggestions";
 import { Container } from "./style";
 
-interface Data {
-  [key: string]: any;
-}
+import TextField from "../TextField/TextField";
+import SuggestionList from "../SuggestionList/SuggestionList";
 
 interface AutoSuggestFilterStateProps {
   inputProps: {
@@ -12,11 +11,12 @@ interface AutoSuggestFilterStateProps {
     value: string;
     onChange: (value: string) => void;
   };
-  suggestions: Array<Data> | Array<string>;
+  suggestions: Suggestions;
 }
 
 interface AutoSuggestFilterDispatchProps {
   onSuggestionsFetch: (value: string) => void;
+  renderSuggestion: <T>(suggestion: T) => JSX.Element;
 }
 
 type AutoSuggestFilterProps = AutoSuggestFilterDispatchProps &
@@ -26,6 +26,7 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
   inputProps,
   suggestions,
   onSuggestionsFetch,
+  renderSuggestion,
 }) => {
   const { placeholder, value, onChange } = inputProps;
 
@@ -45,6 +46,10 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
         value={value}
         onChange={onChangeTextField}
         isShowDropdown={isShowDropdown}
+      />
+      <SuggestionList
+        suggestions={suggestions}
+        renderSuggestion={renderSuggestion}
       />
     </Container>
   );
