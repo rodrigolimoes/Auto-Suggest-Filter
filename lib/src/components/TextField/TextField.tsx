@@ -9,6 +9,7 @@ interface TextFieldStateProps {
 
 interface TextFieldDispatchProps {
   onChange: (value: string) => void;
+  onHandleKey: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 type TextFieldProps = TextFieldDispatchProps & TextFieldStateProps;
@@ -18,6 +19,7 @@ const TextField: React.FC<TextFieldProps> = ({
   value,
   isShowDropdown,
   onChange,
+  onHandleKey,
 }) => {
   return (
     <Input
@@ -27,6 +29,7 @@ const TextField: React.FC<TextFieldProps> = ({
       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
         onChange(event.target.value);
       }}
+      onKeyDown={onHandleKey}
     />
   );
 };

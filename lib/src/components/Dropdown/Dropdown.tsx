@@ -7,6 +7,7 @@ import { Filters } from "../../model/Filters";
 interface DropdownStateProps {
   suggestions: Suggestions;
   filters: Array<Filters>;
+  currentSuggestion: number;
 }
 
 interface DropdownDispatchProps {
@@ -18,6 +19,7 @@ type DropdownProps = DropdownStateProps & DropdownDispatchProps;
 const Dropdown: React.FC<DropdownProps> = ({
   suggestions,
   filters,
+  currentSuggestion,
   renderSuggestion,
 }) => {
   return (
@@ -31,7 +33,11 @@ const Dropdown: React.FC<DropdownProps> = ({
             {suggestions.map((suggestion, i) => {
               const isLastElement = suggestions.length - 1 === i;
               return (
-                <Element key={i} isLastElement={isLastElement}>
+                <Element
+                  key={i}
+                  isHovered={currentSuggestion === i}
+                  isLastElement={isLastElement}
+                >
                   {renderSuggestion(suggestion)}
                 </Element>
               );

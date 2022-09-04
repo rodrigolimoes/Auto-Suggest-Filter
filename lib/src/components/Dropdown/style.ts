@@ -1,20 +1,23 @@
 import styled, { css } from "styled-components";
 
-type ElementProps = { isLastElement: boolean };
+type ElementProps = { isLastElement: boolean; isHovered: boolean };
 
 export const Element = styled.li<ElementProps>`
   width: 100%;
   list-style: none;
   padding: 10px;
 
-  &:hover {
-    background-color: #f8ecec;
-  }
   ${(props) =>
     props.isLastElement &&
     css`
       border-bottom-left-radius: 10px;
       border-bottom-right-radius: 10px;
+    `}
+
+  ${(props) =>
+    props.isHovered &&
+    css`
+      background-color: #f8ecec;
     `}
 `;
 
