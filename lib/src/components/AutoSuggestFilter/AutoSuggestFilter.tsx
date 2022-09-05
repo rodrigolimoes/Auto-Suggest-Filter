@@ -35,16 +35,18 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
   renderSuggestion,
   getSuggestionValue,
 }) => {
-  const [cursor, setCursor] = useState<number>(0);
+  const [cursor, setCursor] = useState<number>(-1);
+  const [timeoutFetchSuggestion, setTimeoutFetchSuggestion] =
+    useState<NodeJS.Timeout | null>(null);
   const { placeholder, value, onChange } = inputProps;
 
   /**
    * Set a suggestion value when the cursor change
    */
   useEffect(() => {
-    if (suggestions.length > 0) {
+    if (suggestions[cursor]) {
       const inputValue = getSuggestionValue<string | Data>(suggestions[cursor]);
-      onChange(inputValue);
+      if (inputValue) onChange(inputValue.toLowerCase());
     }
   }, [cursor, suggestions]);
 
@@ -57,16 +59,29 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
     key,
   }: React.KeyboardEvent<HTMLInputElement>): void => {
     const { ARROW_UP, ARROW_DOWN } = KeyBoardEvent;
+    const lastIndexSuggestion = suggestions.length - 1;
 
     if (key === ARROW_UP && cursor > 0) setCursor((prevState) => prevState - 1);
 
-    if (key === ARROW_DOWN && cursor < suggestions.length - 1)
+    if (key === ARROW_DOWN && cursor < lastIndexSuggestion)
       setCursor((prevState) => prevState + 1);
+
+    if (key === ARROW_DOWN && cursor === lastIndexSuggestion) setCursor(0);
+
+    if (key === ARROW_UP && cursor <= 0) setCursor(lastIndexSuggestion);
   };
 
   const onChangeTextField = (value: string): void => {
     onChange(value);
-    onSuggestionsFetch(value);
+    if (timeoutFetchSuggestion) clearTimeout(timeoutFetchSuggestion);
+
+    setTimeoutFetchSuggestion(
+      setTimeout(() => {
+        onSuggestionsFetch(value);
+      }, 1000)
+    );
+
+    setCursor(-1);
   };
 
   const isShowDropdown = Array.isArray(suggestions)
