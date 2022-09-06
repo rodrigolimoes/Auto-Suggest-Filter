@@ -38,6 +38,7 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
     Array<Data> | Array<string>
   >([]);
   const [cursor, setCursor] = useState<number>(-1);
+  const [isKeyBoard, setIsKeyBoard] = useState(false);
   const [timeoutFetchSuggestion, setTimeoutFetchSuggestion] =
     useState<NodeJS.Timeout | null>(null);
 
@@ -45,14 +46,14 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
    * Set a suggestion value when the cursor change
    */
   useEffect(() => {
-    if (suggestions[cursor]) {
+    if (suggestions[cursor] && isKeyBoard) {
       const inputValue = getSuggestionValue<string | Data>(suggestions[cursor]);
       if (inputValue) setValue(inputValue);
     }
-  }, [cursor, suggestions]);
+  }, [cursor]);
 
   useEffect(() => {
-    setSuggestionList(suggestions);
+    if (suggestions && suggestions.length > 0) setSuggestionList(suggestions);
   }, [suggestions]);
 
   const resetData = () => {
@@ -111,6 +112,8 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
   }: React.KeyboardEvent<HTMLInputElement>): void => {
     const lastIndexSuggestion = suggestions.length - 1;
 
+    if (!isKeyBoard) setIsKeyBoard(true);
+
     onPressArrowUp(key, lastIndexSuggestion);
     onPressArrowDown(key, lastIndexSuggestion);
     onPressEnter(key);
@@ -119,6 +122,11 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
   const onSelectSuggestion = (index: number) => {
     getSelectedSuggestion(suggestionList[index]);
     resetData();
+  };
+
+  const onHoverSuggestion = (index: number) => {
+    setIsKeyBoard(false);
+    setCursor(index);
   };
 
   const onChangeTextField = (value: string): void => {
@@ -153,6 +161,7 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
         filters={filters}
         renderSuggestion={renderSuggestion}
         onSelectSuggestion={onSelectSuggestion}
+        onHoverSuggestion={onHoverSuggestion}
       />
     </Container>
   );
