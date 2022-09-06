@@ -6,6 +6,7 @@ export const Element = styled.li<ElementProps>`
   width: 100%;
   list-style: none;
   padding: 10px;
+  cursor: pointer;
 
   ${(props) =>
     props.isLastElement &&

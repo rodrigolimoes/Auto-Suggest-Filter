@@ -55,6 +55,12 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
     setSuggestionList(suggestions);
   }, [suggestions]);
 
+  const resetData = () => {
+    setValue("");
+    setSuggestionList([]);
+    setCursor(-1);
+  };
+
   /**
    * Change the index of cursor if the keyboard arrow up is pressed
    * @param key
@@ -91,14 +97,12 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
 
     if (key === ENTER) {
       getSelectedSuggestion(suggestionList[cursor]);
-      setValue("");
-      setSuggestionList([]);
-      setCursor(-1);
+      resetData();
     }
   };
 
   /**
-   * This function get the keyboard event and update the index of suggestions
+   * This function gets the keyboard event and triggers an action with the base of the key pressed
    * @param key
    * @return void
    */
@@ -110,6 +114,11 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
     onPressArrowUp(key, lastIndexSuggestion);
     onPressArrowDown(key, lastIndexSuggestion);
     onPressEnter(key);
+  };
+
+  const onSelectSuggestion = (index: number) => {
+    getSelectedSuggestion(suggestionList[index]);
+    resetData();
   };
 
   const onChangeTextField = (value: string): void => {
@@ -141,8 +150,9 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
       <Dropdown
         currentSuggestion={cursor}
         suggestions={suggestionList}
-        renderSuggestion={renderSuggestion}
         filters={filters}
+        renderSuggestion={renderSuggestion}
+        onSelectSuggestion={onSelectSuggestion}
       />
     </Container>
   );

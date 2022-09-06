@@ -12,6 +12,7 @@ interface DropdownStateProps {
 
 interface DropdownDispatchProps {
   renderSuggestion: <T>(suggestion: T) => JSX.Element;
+  onSelectSuggestion: (index: number) => void;
 }
 
 type DropdownProps = DropdownStateProps & DropdownDispatchProps;
@@ -21,6 +22,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   filters,
   currentSuggestion,
   renderSuggestion,
+  onSelectSuggestion,
 }) => {
   return (
     <React.Fragment>
@@ -37,6 +39,9 @@ const Dropdown: React.FC<DropdownProps> = ({
                   key={i}
                   isHovered={currentSuggestion === i}
                   isLastElement={isLastElement}
+                  onClick={() => {
+                    onSelectSuggestion(i);
+                  }}
                 >
                   {renderSuggestion(suggestion)}
                 </Element>
