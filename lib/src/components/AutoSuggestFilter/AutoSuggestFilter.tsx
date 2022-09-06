@@ -9,11 +9,7 @@ import TextField from "../TextField/TextField";
 import Dropdown from "../Dropdown/Dropdown";
 
 interface AutoSuggestFilterStateProps {
-  inputProps: {
-    placeholder: string;
-    value: string;
-    onChange: (value: string) => void;
-  };
+  placeholder: string;
   suggestions: Suggestions;
   filters: Array<Filters>;
 }
@@ -28,17 +24,17 @@ type AutoSuggestFilterProps = AutoSuggestFilterDispatchProps &
   AutoSuggestFilterStateProps;
 
 const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
-  inputProps,
+  placeholder,
   suggestions,
   filters,
   onSuggestionsFetch,
   renderSuggestion,
   getSuggestionValue,
 }) => {
+  const [value, setValue] = useState<string>("");
   const [cursor, setCursor] = useState<number>(-1);
   const [timeoutFetchSuggestion, setTimeoutFetchSuggestion] =
     useState<NodeJS.Timeout | null>(null);
-  const { placeholder, value, onChange } = inputProps;
 
   /**
    * Set a suggestion value when the cursor change
@@ -46,7 +42,7 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
   useEffect(() => {
     if (suggestions[cursor]) {
       const inputValue = getSuggestionValue<string | Data>(suggestions[cursor]);
-      if (inputValue) onChange(inputValue.toLowerCase());
+      if (inputValue) setValue(inputValue);
     }
   }, [cursor, suggestions]);
 
@@ -72,7 +68,7 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
   };
 
   const onChangeTextField = (value: string): void => {
-    onChange(value);
+    setValue(value);
     if (timeoutFetchSuggestion) clearTimeout(timeoutFetchSuggestion);
 
     setTimeoutFetchSuggestion(
