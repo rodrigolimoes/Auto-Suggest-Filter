@@ -47,6 +47,31 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
   }, [cursor, suggestions]);
 
   /**
+   * Change the index of cursor if the keyboard arrow up is pressed
+   * @param key
+   * @param lastIndexSuggestion
+   */
+  const onPressArrowUp = (key: string, lastIndexSuggestion: number): void => {
+    const { ARROW_UP } = KeyBoardEvent;
+    if (key === ARROW_UP && cursor > 0) setCursor((prevState) => prevState - 1);
+    if (key === ARROW_UP && cursor <= 0) setCursor(lastIndexSuggestion);
+  };
+
+  /**
+   * Change the index of cursor if the keyboard arrow down is pressed
+   * @param key
+   * @param lastIndexSuggestion
+   */
+  const onPressArrowDown = (key: string, lastIndexSuggestion: number): void => {
+    const { ARROW_DOWN } = KeyBoardEvent;
+
+    if (key === ARROW_DOWN && cursor < lastIndexSuggestion)
+      setCursor((prevState) => prevState + 1);
+
+    if (key === ARROW_DOWN && cursor === lastIndexSuggestion) setCursor(0);
+  };
+
+  /**
    * This function get the keyboard event and update the index of suggestions
    * @param key
    * @return void
@@ -54,17 +79,10 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
   const onHandleKey = ({
     key,
   }: React.KeyboardEvent<HTMLInputElement>): void => {
-    const { ARROW_UP, ARROW_DOWN } = KeyBoardEvent;
     const lastIndexSuggestion = suggestions.length - 1;
 
-    if (key === ARROW_UP && cursor > 0) setCursor((prevState) => prevState - 1);
-
-    if (key === ARROW_DOWN && cursor < lastIndexSuggestion)
-      setCursor((prevState) => prevState + 1);
-
-    if (key === ARROW_DOWN && cursor === lastIndexSuggestion) setCursor(0);
-
-    if (key === ARROW_UP && cursor <= 0) setCursor(lastIndexSuggestion);
+    onPressArrowUp(key, lastIndexSuggestion);
+    onPressArrowDown(key, lastIndexSuggestion);
   };
 
   const onChangeTextField = (value: string): void => {
