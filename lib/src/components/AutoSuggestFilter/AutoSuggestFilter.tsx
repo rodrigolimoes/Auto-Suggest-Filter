@@ -18,6 +18,7 @@ interface AutoSuggestFilterDispatchProps {
   onSuggestionsFetch: (value: string) => void;
   renderSuggestion: <T>(suggestion: T) => JSX.Element;
   getSuggestionValue: <T>(item: T) => string;
+  getSelectedSuggestion: <T>(suggestion: T) => void;
 }
 
 type AutoSuggestFilterProps = AutoSuggestFilterDispatchProps &
@@ -30,8 +31,12 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
   onSuggestionsFetch,
   renderSuggestion,
   getSuggestionValue,
+  getSelectedSuggestion,
 }) => {
   const [value, setValue] = useState<string>("");
+  const [suggestionList, setSuggestionList] = useState<
+    Array<Data> | Array<string>
+  >([]);
   const [cursor, setCursor] = useState<number>(-1);
   const [timeoutFetchSuggestion, setTimeoutFetchSuggestion] =
     useState<NodeJS.Timeout | null>(null);
@@ -45,6 +50,10 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
       if (inputValue) setValue(inputValue);
     }
   }, [cursor, suggestions]);
+
+  useEffect(() => {
+    setSuggestionList(suggestions);
+  }, [suggestions]);
 
   /**
    * Change the index of cursor if the keyboard arrow up is pressed
@@ -72,6 +81,23 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
   };
 
   /**
+   * If the keyboard Enter is pressed
+   * 1- Informs the selected suggestion
+   * 2- Reset the suggestion List, the value of text field, and cursor.
+   * @param key
+   */
+  const onPressEnter = (key: string): void => {
+    const { ENTER } = KeyBoardEvent;
+
+    if (key === ENTER) {
+      getSelectedSuggestion(suggestionList[cursor]);
+      setValue("");
+      setSuggestionList([]);
+      setCursor(-1);
+    }
+  };
+
+  /**
    * This function get the keyboard event and update the index of suggestions
    * @param key
    * @return void
@@ -83,6 +109,7 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
 
     onPressArrowUp(key, lastIndexSuggestion);
     onPressArrowDown(key, lastIndexSuggestion);
+    onPressEnter(key);
   };
 
   const onChangeTextField = (value: string): void => {
@@ -98,8 +125,8 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
     setCursor(-1);
   };
 
-  const isShowDropdown = Array.isArray(suggestions)
-    ? suggestions.length > 0
+  const isShowDropdown = Array.isArray(suggestionList)
+    ? suggestionList.length > 0
     : false;
 
   return (
@@ -113,7 +140,7 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
       />
       <Dropdown
         currentSuggestion={cursor}
-        suggestions={suggestions}
+        suggestions={suggestionList}
         renderSuggestion={renderSuggestion}
         filters={filters}
       />
