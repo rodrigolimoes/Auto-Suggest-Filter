@@ -5,18 +5,33 @@ import { Filters } from "../../model/Filters";
 interface SuggestionFilterStateProps {
   filters: Array<Filters>;
 }
-interface SuggestionFilterDispatchProps {}
+interface SuggestionFilterDispatchProps {
+  onSelectFilter: (index: number) => void;
+}
 
 type SuggestionFilterProps = SuggestionFilterStateProps &
   SuggestionFilterDispatchProps;
 
-const SuggestionFilter: React.FC<SuggestionFilterProps> = ({ filters }) => {
+const SuggestionFilter: React.FC<SuggestionFilterProps> = ({
+  filters,
+  onSelectFilter,
+}) => {
   return (
     <Header>
       <small>Filter</small>
       <WrapperTags>
         {filters.length > 0
-          ? filters.map((e) => <Tag key={e.value}>{e.label}</Tag>)
+          ? filters.map((e, i) => (
+              <Tag
+                key={e.value}
+                onClick={() => {
+                  onSelectFilter(i);
+                }}
+                isSelected={e.checked}
+              >
+                {e.label}
+              </Tag>
+            ))
           : null}
       </WrapperTags>
     </Header>

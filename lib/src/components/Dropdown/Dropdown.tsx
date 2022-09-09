@@ -14,6 +14,7 @@ interface DropdownDispatchProps {
   renderSuggestion: <T>(suggestion: T) => JSX.Element;
   onSelectSuggestion: (index: number) => void;
   onHoverSuggestion: (index: number) => void;
+  onSelectFilter: (index: number) => void;
 }
 
 type DropdownProps = DropdownStateProps & DropdownDispatchProps;
@@ -25,13 +26,17 @@ const Dropdown: React.FC<DropdownProps> = ({
   renderSuggestion,
   onSelectSuggestion,
   onHoverSuggestion,
+  onSelectFilter,
 }) => {
   return (
     <React.Fragment>
       {suggestions.length > 0 ? (
         <React.Fragment>
           {Array.isArray(filters) && filters.length > 0 ? (
-            <SuggestionFilter filters={filters} />
+            <SuggestionFilter
+              filters={filters}
+              onSelectFilter={onSelectFilter}
+            />
           ) : null}
           <Wrapper>
             {suggestions.map((suggestion, i) => {

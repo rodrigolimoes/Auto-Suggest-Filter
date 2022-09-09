@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-export const Tag = styled.div`
+export const Tag = styled.div<{ isSelected: boolean }>`
   display: inline-block;
   padding: 3px 10px 3px 10px;
   margin: 5px 5px 0 0;
@@ -14,6 +14,12 @@ export const Tag = styled.div`
   &:hover {
     background-color: #dcdcdc;
   }
+
+  ${(props) =>
+    props.isSelected &&
+    css`
+      background-color: #dcdcdc;
+    `}
 `;
 
 export const WrapperTags = styled.div`

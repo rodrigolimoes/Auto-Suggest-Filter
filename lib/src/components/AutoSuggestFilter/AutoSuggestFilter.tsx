@@ -37,6 +37,7 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
   const [suggestionList, setSuggestionList] = useState<
     Array<Data> | Array<string>
   >([]);
+  const [filterList, setFilterList] = useState<Array<Filters>>([]);
   const [cursor, setCursor] = useState<number>(-1);
   const [isKeyBoard, setIsKeyBoard] = useState(false);
   const [timeoutFetchSuggestion, setTimeoutFetchSuggestion] =
@@ -55,6 +56,10 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
   useEffect(() => {
     if (suggestions && suggestions.length > 0) setSuggestionList(suggestions);
   }, [suggestions]);
+
+  useEffect(() => {
+    if (filters && filters.length > 0) setFilterList(filters);
+  }, [filters]);
 
   const resetData = () => {
     setValue("");
@@ -142,6 +147,17 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
     setCursor(-1);
   };
 
+  const onSelectFilter = (index: number) => {
+    const filters = [...filterList];
+
+    filters[index] = {
+      ...filters[index],
+      checked: !filters[index].checked,
+    };
+
+    setFilterList(filters);
+  };
+
   const isShowDropdown = Array.isArray(suggestionList)
     ? suggestionList.length > 0
     : false;
@@ -158,10 +174,11 @@ const AutoSuggestFilter: React.FC<AutoSuggestFilterProps> = ({
       <Dropdown
         currentSuggestion={cursor}
         suggestions={suggestionList}
-        filters={filters}
+        filters={filterList}
         renderSuggestion={renderSuggestion}
         onSelectSuggestion={onSelectSuggestion}
         onHoverSuggestion={onHoverSuggestion}
+        onSelectFilter={onSelectFilter}
       />
     </Container>
   );
