@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 type InputStyleProps = {
   isShowDropdown: boolean;
@@ -15,12 +15,4 @@ export const Input = styled.input<InputStyleProps>`
     outline: none;
     border-color: rgb(0, 0, 0, 25%);
   }
-
-  ${(props) =>
-    props.isShowDropdown &&
-    css`
-      border-bottom: none;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    `}
 `;
