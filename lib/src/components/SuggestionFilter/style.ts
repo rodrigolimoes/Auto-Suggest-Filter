@@ -29,9 +29,6 @@ export const WrapperTags = styled.div`
 export const Header = styled.header`
   width: 100%;
   padding: 0 10px 0 10px;
-  margin: 0;
 
-  border: solid 2px rgb(0, 0, 0, 18%);
-  border-top: none;
-  border-bottom: none;
+  border: none;
 `;

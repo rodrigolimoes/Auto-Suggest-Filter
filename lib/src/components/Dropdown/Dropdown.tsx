@@ -1,5 +1,5 @@
 import React from "react";
-import { Wrapper, Element } from "./style";
+import { Element, DropdownContainer } from "./style";
 import { Suggestions } from "../../model/Suggestions";
 import SuggestionFilter from "../SuggestionFilter/SuggestionFilter";
 import { Filters } from "../../model/Filters";
@@ -28,9 +28,11 @@ const Dropdown: React.FC<DropdownProps> = ({
   onHoverSuggestion,
   onSelectFilter,
 }) => {
-  return (
-    <React.Fragment>
-      {suggestions.length > 0 ? (
+  let content: JSX.Element | null = null;
+
+  if (Array.isArray(suggestions) && suggestions.length > 0) {
+    content = (
+      <DropdownContainer>
         <React.Fragment>
           {Array.isArray(filters) && filters.length > 0 ? (
             <SuggestionFilter
@@ -38,33 +40,33 @@ const Dropdown: React.FC<DropdownProps> = ({
               onSelectFilter={onSelectFilter}
             />
           ) : null}
-          <Wrapper>
-            {suggestions.map((suggestion, i) => {
-              const isLastElement = suggestions.length - 1 === i;
-              return (
-                <Element
-                  key={i}
-                  isHovered={currentSuggestion === i}
-                  isLastElement={isLastElement}
-                  onMouseOver={() => {
-                    onHoverSuggestion(i);
-                  }}
-                  onMouseOut={() => {
-                    onHoverSuggestion(-1);
-                  }}
-                  onClick={() => {
-                    onSelectSuggestion(i);
-                  }}
-                >
-                  {renderSuggestion(suggestion)}
-                </Element>
-              );
-            })}
-          </Wrapper>
+          {suggestions.map((suggestion, i) => {
+            const isLastElement = suggestions.length - 1 === i;
+            return (
+              <Element
+                key={i}
+                isHovered={currentSuggestion === i}
+                isLastElement={isLastElement}
+                onMouseOver={() => {
+                  onHoverSuggestion(i);
+                }}
+                onMouseOut={() => {
+                  onHoverSuggestion(-1);
+                }}
+                onClick={() => {
+                  onSelectSuggestion(i);
+                }}
+              >
+                {renderSuggestion(suggestion)}
+              </Element>
+            );
+          })}
         </React.Fragment>
-      ) : null}
-    </React.Fragment>
-  );
+      </DropdownContainer>
+    );
+  }
+
+  return <React.Fragment>{content}</React.Fragment>;
 };
 
 export default Dropdown;
