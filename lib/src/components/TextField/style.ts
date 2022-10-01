@@ -9,7 +9,7 @@ export const Input = styled.input<InputStyleProps>`
   color: #b4a19d;
   padding: 10px;
   border: solid 2px rgb(0, 0, 0, 18%);
-  border-radius: 10px;
+  border-radius: 5px;
 
   &:focus {
     outline: none;
